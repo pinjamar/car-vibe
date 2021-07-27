@@ -5,7 +5,11 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 
+import scala.collection._
+
 import play.api.libs.json._
+
+import models._
 
 
 
@@ -23,6 +27,8 @@ extends BaseController {
 
   implicit val todoListJson = Json.format[TodoListItem]
 
+  implicit val newTodoListJson = Json.format[NewTodoListItem]
+
  
 
   def getAll(): Action[AnyContent] = Action {
@@ -30,6 +36,33 @@ extends BaseController {
     NoContent
   } else {
     Ok(Json.toJson(todoList))
+  }
+}
+
+def getById(itemId: Long) = Action {
+  val foundItem = todoList.find(_.id == itemId)
+  foundItem match {
+    case Some(item) => Ok(Json.toJson(item))
+    case None => NotFound
+  }
+}
+
+def addNewItem() = Action { implicit request => 
+  val content = request.body 
+  val jsonObject = content.asJson 
+  val todoListItem: Option[NewTodoListItem] = 
+    jsonObject.flatMap( 
+      Json.fromJson[NewTodoListItem](_).asOpt 
+    )
+
+     todoListItem match {
+    case Some(newItem) =>
+      val nextId = todoList.map(_.id).max + 1
+      val toBeAdded = TodoListItem(nextId, newItem.description, false)
+      todoList += toBeAdded
+      Created(Json.toJson(toBeAdded))
+    case None =>
+      BadRequest
   }
 }
 }
