@@ -44,3 +44,5 @@ class $model;format="Camel"$Controller @Inject()(mcc: MessagesControllerComponen
     )
   }
 }
+
+
