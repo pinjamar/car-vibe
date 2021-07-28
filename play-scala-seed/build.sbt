@@ -1,5 +1,5 @@
 name := """play-scala-seed"""
-organization := "carscacarts.cocars"
+organization := "carscaca.cocars"
 
 version := "1.0-SNAPSHOT"
 

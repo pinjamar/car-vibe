@@ -14,7 +14,8 @@ GET     /todo                       controllers.TodoListController.getAll
 
 GET    /todo/:itemId           controllers.TodoListController.getById(itemId: Long)
 
-PUT     /todo/done/:itemId    controllers.TodoListController.markAsDone(itemId: Long)
-DELETE  /todo/done            controllers.TodoListController.deleteAllDone
+PUT     /todo/done/:itemId    controllers.TodoListController.updateItem(itemId: Long)
+DELETE  /todo/done              controllers.TodoListController.deleteAllDone
+DELETE  /todo/done/:itemId      controllers.TodoListController.delete(itemId: Long)
 
 POST     /todo                      controllers.TodoListController.addNewItem
