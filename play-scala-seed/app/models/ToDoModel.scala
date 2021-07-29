@@ -1,8 +1,7 @@
- 
- package models
- 
- case class TodoListItem(id: Long, description: String, isItDone: Boolean)
+package models
 
- case class NewTodoListItem(description: String)
+case class TodoListItem(id: Long, description: String, isItDone: Boolean)
 
- case class EditTodoListItem(description: String, isItDone: Boolean)
+case class NewTodoListItem(description: String)
+
+case class EditTodoListItem(description: String, isItDone: Boolean)

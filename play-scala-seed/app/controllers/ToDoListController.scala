@@ -1,26 +1,21 @@
 package controllers
 
-import javax.inject._
-import play.api._
+import models._
+import play.api.libs.json._
 import play.api.mvc._
 
+import javax.inject._
 import scala.collection._
 
-import play.api.libs.json._
-
-import models._
-
 @Singleton
-class TodoListController @Inject()(val controllerComponents: ControllerComponents)
+class ToDoListController @Inject()(val controllerComponents: ControllerComponents)
   extends BaseController {
-
 
   private var todoList = new mutable.ListBuffer[TodoListItem]()
   todoList += TodoListItem(1, "test", true)
   todoList += TodoListItem(2, "some other value", false)
 
   implicit val todoListJson = Json.format[TodoListItem]
-
   implicit val newTodoListJson = Json.format[NewTodoListItem]
   implicit val editTodoListJson = Json.format[EditTodoListItem]
 
