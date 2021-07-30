@@ -28,10 +28,14 @@ class CarAdvertRestController @Inject()(
     }
   }
 
-  def editAdvertById(itemId: Long): Action[AnyContent] = Action {
-    autoRepo.byId(itemId) match {
-      case Some(car) => Ok(asJson(car))
-      case None => NotFound
+  def editAdvertById(itemId: Long): Action[CreateUpdateAutoAdvert] =  Action(circe.json[CreateUpdateAutoAdvert]) { implicit request =>
+    val carAdvert =  autoRepo.byId(itemId)
+      if (carAdvert.isEmpty)
+        NoContent
+      else
+    autoRepo.editAdvert(request.body, itemId) match {
+      case Left(error) => UnprocessableEntity(asJson(error))
+      case Right(advert) => Ok(asJson(advert))
     }
   }
 

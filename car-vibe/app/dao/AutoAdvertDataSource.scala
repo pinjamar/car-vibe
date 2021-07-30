@@ -45,7 +45,8 @@ class AutoAdvertDataSource @Inject()(
   }
 
   def byId(id: Long): Option[AutoAdvert] = db.withConnection { implicit c =>
-    SQL("""
+    SQL(
+      """
          select AutoAdverts.id, title, FuelTypes.name AS fuel_type, price, mileage, is_new, first_registration from AutoAdverts
          inner join FuelTypes on AutoAdverts.fuel_type_id = FuelTypes.id
          where AutoAdverts.id = {id}
@@ -64,7 +65,8 @@ class AutoAdvertDataSource @Inject()(
     val fuelTypeId = fuelTypesRepository.byName(advert.fuelType).get.id
 
     val result =
-      SQL("""
+      SQL(
+        """
             insert into AutoAdverts (title, fuel_type_id, price, mileage, is_new, first_registration)
             values ({title}, {fuelTypeId}, {price}, {mileage}, {is_new}, {first_registration})
          """)
@@ -104,15 +106,24 @@ class AutoAdvertDataSource @Inject()(
       case Some(errorsList) => return Left(ValidationErrors(errorsList.toList))
       case None =>
     }
-
     val fuelTypeId = fuelTypesRepository.byName(advert.fuelType).get.id
 
-    val result =
-      SQL("""
-            insert into AutoAdverts (title, fuel_type_id, price, mileage, is_new, first_registration)
-            values ({title}, {fuelTypeId}, {price}, {mileage}, {is_new}, {first_registration})
+    try {
+      SQL(
+        """
+            update
+              AutoAdverts
+            set
+                title = {title},
+                fuel_type_id = {fuelTypeId},
+                price = {price},
+                mileage = {mileage},
+                is_new = {is_new},
+                first_registration = {first_registration}
+            where id = {id}
          """)
         .on(
+          "id" -> itemId,
           "title" -> advert.title,
           "fuelTypeId" -> fuelTypeId,
           "price" -> advert.price,
@@ -120,18 +131,15 @@ class AutoAdvertDataSource @Inject()(
           "is_new" -> (if (advert.isNew) 1 else 0),
           "first_registration" -> advert.firstRegistration
         )
-        .executeInsert1("id")(scalar[Long].singleOpt)
+        .executeUpdate()
 
-    if (result.isFailure) {
-      Left(GenericErrors(List("Cannot execute statement")))
-    }
-
-    result.get match {
-      case Some(value) => byId(value) match {
-        case Some(advert) => Right(advert)
-        case _ => Left(GenericErrors(List("Invalid Id")))
+      byId(itemId) match {
+        case Some(item) => Right(item)
+        case None => Left(GenericErrors(List("Element not found")))
       }
-      case None => Left(GenericErrors(List("Cannot execute statement")))
+
+    } catch {
+      case r: Throwable => return Left(GenericErrors(List(r.getMessage)))
     }
   }
 
