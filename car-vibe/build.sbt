@@ -1,4 +1,4 @@
-name := """play-scala-seed"""
+name := """car-vibe"""
 organization := "com.pinjamar.cars"
 
 version := "1.0-SNAPSHOT"

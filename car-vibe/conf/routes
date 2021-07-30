@@ -16,13 +16,4 @@ PUT           /car/adverts/:itemId        controllers.CarAdvertRestController.ed
 POST          /car/adverts                controllers.CarAdvertRestController.addNewAdvert
 DELETE        /car/adverts/:itemId        controllers.CarAdvertRestController.deleteAdvert(itemId: Long)
 
-# Fuel Types
-GET           /car/fuels                  controllers.FuelTypeController.all
 
-# ToDo Fields - To Remove
-GET           /todo                       controllers.ToDoListController.getAll
-GET           /todo/:itemId               controllers.ToDoListController.getById(itemId: Long)
-PUT           /todo/done/:itemId          controllers.ToDoListController.updateItem(itemId: Long)
-DELETE        /todo/done                  controllers.ToDoListController.deleteAllDone
-DELETE        /todo/done/:itemId          controllers.ToDoListController.delete(itemId: Long)
-POST          /todo                       controllers.ToDoListController.addNewItem
