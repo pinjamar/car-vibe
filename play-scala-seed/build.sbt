@@ -16,7 +16,8 @@ libraryDependencies += guice
 libraryDependencies ++= Seq(jdbc, evolutions)
 libraryDependencies ++= Seq(
   "org.playframework.anorm" %% "anorm" % anormVersion,
-  "org.xerial" % "sqlite-jdbc" % sqliteVersion
+  "org.xerial" % "sqlite-jdbc" % sqliteVersion,
+  "com.dripower" %% "play-circe" % circePlayVersion
 )
 
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
@@ -27,8 +28,3 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser"
 ).map(_ % circeVersion)
 
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "com.pinjamar.cars.controllers._"
-
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "com.pinjamar.cars.binders._"

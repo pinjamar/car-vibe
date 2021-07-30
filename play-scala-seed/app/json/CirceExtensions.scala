@@ -1,20 +1,12 @@
 package json
 
-import akka.util.ByteString
-import com.google.common.base.Charsets
-import io.circe._
-import io.circe.syntax._
-import play.api.http._
+import io.circe.syntax.EncoderOps
+import io.circe.{Encoder, Json, Printer}
+import play.api.libs.circe.Circe
 
-trait CirceExtensions extends Status {
+trait CirceExtensions extends Circe {
 
-  private val jsonPrinter = Printer.noSpaces.copy(dropNullValues = true)
-
-  private implicit val jsonContentType: ContentTypeOf[Json] = ContentTypeOf(Some(ContentTypes.JSON))
-  implicit var circeJsonWritable: Writeable[Json] = Writeable[Json](e => ByteString.fromString(
-    jsonPrinter.print(e),
-    Charsets.UTF_8
-  ))
+  implicit val customPrinter: Printer = Printer.noSpaces.copy(dropNullValues = true)
 
   def asJson[E](value: E)(implicit encoder: Encoder[E]): Json = value.asJson
 }

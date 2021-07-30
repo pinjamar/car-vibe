@@ -20,7 +20,7 @@ create table AutoAdverts(
 	title varchar(128) not null,
 	fuel_type_id integer not null,
 	price real not null default 0,
-	km integer null,
+	mileage integer null,
 	is_new integer not null default 1,
 	first_registration text null,
 

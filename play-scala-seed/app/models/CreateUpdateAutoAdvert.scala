@@ -1,7 +1,6 @@
 package models
 
-case class AutoAdvert(
-  id: Long,
+case class CreateUpdateAutoAdvert(
   title: String,
   fuelType: String,
   price: Double,

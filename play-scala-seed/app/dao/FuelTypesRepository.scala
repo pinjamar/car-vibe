@@ -1,6 +1,6 @@
 package dao
 
-import anorm.{Macro, RowParser, SqlStringInterpolation}
+import anorm.{Macro, RowParser, SQL, SqlStringInterpolation}
 import models.FuelTypes
 import play.api.db.{DBApi, Database}
 
@@ -13,5 +13,11 @@ class FuelTypesRepository @Inject()(var dbApi: DBApi)(implicit ec: DatabaseExecu
 
   def all: Seq[FuelTypes] = db.withConnection { implicit c =>
     SQL"select * from FuelTypes".as(rowParser.*)
+  }
+
+  def byName(name: String): Option[FuelTypes] = db.withConnection { implicit c =>
+    SQL("select * from FuelTypes where name = {query_name}").on("query_name" -> name)
+      .as(rowParser.*)
+      .headOption
   }
 }
